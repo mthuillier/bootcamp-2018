@@ -152,7 +152,7 @@ report_info <-
     med_le <- median(var)
     min_le <- min(var)
     max_le <- max(var) 
-    cat("Continent:", continent, 
+    cat("Continent:", continent,
         "\nMean Life Expectancy:", m_le,
         "\nMedian Life Expectancy:", med_le,
         "\nMinimum Life Expectancy:", min_le,
