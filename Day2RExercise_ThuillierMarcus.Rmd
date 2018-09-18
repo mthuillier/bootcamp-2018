@@ -1,0 +1,178 @@
+---
+title: "R day 2"
+author: "Marcus Thuillier"
+date: "9/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+gapminder <- read.csv(here::here("data", "gapminder5.csv"))
+str(gapminder)
+```
+
+## Converting factors to character
+```{r}
+gapminder$country <- as.character(gapminder$country)
+gapminder$continent <- as.character(gapminder$continent)
+str(gapminder)
+```
+
+```{r}
+# create a vector of values that you want to repeat the function for
+obs <- 1:nrow(gapminder)
+
+# initialize the for loop with `for (i in vector)` 
+for (i in obs) { # the function to repeat is enclosed in braces {}
+  gapminder[i, "gdp"] <- gapminder[i, "pop"] * gapminder[i, "gdpPercap"]
+}
+```
+
+```{r}
+# initialize the for loop with `for (i in vector)` 
+for (i in obs) { # the function to repeat is enclosed in braces {}
+  gapminder[i, "log_gdpPercap"] <- log(gapminder[i, "gdpPercap"])
+  gapminder[i, "log_pop"] <- log(gapminder[i, "pop"])
+}
+gapminder$vec_log_gdpPercap <- log(gapminder$gdpPercap)
+```
+
+```{r}
+years <- unique(gapminder$year)
+
+for (i in years) {
+  mean_le <- mean(gapminder$lifeExp[gapminder$year == i], 
+                  na.rm = T)
+  print(paste0(i, ": ", mean_le))
+}
+```
+
+```{r}
+conts <- unique(gapminder$continent)
+
+for (i in conts) {
+  mean_le <- mean(gapminder$lifeExp[gapminder$continent == i], 
+                  na.rm = T)
+  print(paste0(i, ": ", mean_le))
+}
+```
+
+```{r}
+for (i in conts) {
+  print(paste0("Continent: ", i))
+  for (j in years) {
+    mean_le <- mean(gapminder$lifeExp[gapminder$continent == i & 
+                                          gapminder$year == j], 
+                      na.rm = T)
+    print(paste0(j, ": ", mean_le))
+  }
+}
+```
+
+```{r}
+for (i in conts) {
+  print(paste0("Continent: ", i))
+  for (j in years) {
+    mean_le <- sd(gapminder$lifeExp[gapminder$continent == i & 
+                                          gapminder$year == j], 
+                      na.rm = T)
+    print(paste0(j, ": ", mean_le))
+  }
+}
+```
+
+
+
+```{r}
+lapply(gapminder, mean)
+sapply(gapminder, mean)
+```
+
+
+
+```{r}
+i <-  1987 # define the interator
+
+while (i <= 2002) {
+  sd_le <- sd(gapminder$lifeExp[gapminder$year == i])
+  print(paste0(i, ": ", sd_le)
+        )
+  i <- i + 5 # increase the iterator by the interval between years
+}
+
+```
+
+```{r}
+set.seed(1)
+random_year <- sample(years, 1)
+
+if (random_year > 1977) {
+  print(random_year)
+  } else {
+  print("sorry, random year is less than 1977")  
+  }
+```
+
+
+```{r}
+threshold <- 70
+
+for (i in unique(gapminder$continent)) {
+   tmp <- mean(gapminder$lifeExp[gapminder$continent==i])
+   
+   if (tmp < threshold) {
+       print(paste("Mean Life Expectancy in", i, "is less than", threshold))
+   } else {
+       print(paste("Mean Life Expectancy in", i, "is greater than", threshold))
+   }
+}
+```
+
+
+```{r}
+for (i in years) {
+  if (i >= 1987) {
+    mean_pop <- mean(gapminder$lifeExp[gapminder$year == i])
+    print(paste0(i, ": ", mean_pop))
+  } else {
+    print("Sorry, year is less than 1987")
+  }
+}
+```
+
+
+```{r}
+report_info <- 
+  function(df, variable, continent) {
+    var <- df[[variable]][df$continent == continent]
+    m_le <- mean(var)
+    med_le <- median(var)
+    min_le <- min(var)
+    max_le <- max(var) 
+    cat("Continent:", continent, 
+        "\nMean Life Expectancy:", m_le,
+        "\nMedian Life Expectancy:", med_le,
+        "\nMinimum Life Expectancy:", min_le,
+        "\nMaximum Life Expectancy:", max_le)
+  }
+
+report_info(gapminder, "lifeExp", "Asia")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
