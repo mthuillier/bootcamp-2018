@@ -1,0 +1,66 @@
+---
+title: "Day3_Final_Exercise"
+author: "Marcus Thuillier"
+date: "9/19/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading the data
+```{r}
+library(data.table)
+library(lubridate)
+library(dplyr)
+
+schools <- fread(here::here("data/nys_schools.csv"), 
+                       stringsAsFactors = F)
+counties <- fread(here::here("data/nys_acs.csv"), 
+                    stringsAsFactors = F)
+```
+
+Exploring the data schools
+```{r}
+str(schools)
+head(schools)
+schools[schools==-99] <- NA
+```
+
+Exploring the data counties
+```{r}
+str(counties)
+head(counties)
+summary(counties)
+```
+
+```{r}
+LOW <- counties[county_per_poverty < .10903,]
+MEDIUM <- counties[county_per_poverty > .10903 & county_per_poverty < .14929,]
+HIGH <- counties[county_per_poverty > .14929,]
+```
+
+```{r}
+schools <- schools[,stdscore := mean_ela_score + mean_math_score, by = year]
+
+```
+
+```{r}
+
+#newdt <- merge(schools, counties, by = "county_name")
+
+#newdt_long <-  melt(newdtall_generation,
+#                             id.vars = "county_name", 
+#                             variable.name = "type")
+```
+
+
+
+
+
+
+
+
+
+
