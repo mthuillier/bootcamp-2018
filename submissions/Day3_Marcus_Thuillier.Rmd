@@ -1,0 +1,78 @@
+---
+title: "Day3_Final_Exercise"
+author: "Marcus Thuillier"
+date: "9/19/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading the data
+```{r}
+library(data.table)
+library(lubridate)
+library(dplyr)
+
+schools <- fread(here::here("data/nys_schools.csv"), 
+                       stringsAsFactors = F)
+counties <- fread(here::here("data/nys_acs.csv"), 
+                    stringsAsFactors = F)
+```
+
+Exploring the data schools
+```{r}
+str(schools)
+head(schools)
+schools[schools==-99] <- NA
+```
+
+Exploring the data counties
+```{r}
+str(counties)
+head(counties)
+summary(counties)
+counties[counties==-99] <- NA
+```
+
+```{r}
+
+LOW <- counties[county_per_poverty < .10903,]
+MEDIUM <- counties[county_per_poverty > .10903 & county_per_poverty < .14929,]
+HIGH <- counties[county_per_poverty > .14929,]
+```
+
+```{r}
+schools <- schools[,Zscore := scale(mean_ela_score + mean_math_score), by = year]
+
+```
+
+```{r}
+
+#setkey(schools, county_name)
+#counties[schools]
+
+##I don't know why I couldn't merge the two tables I've tried all the examples we did in class
+```
+
+```{r}
+
+```
+
+1. For each county: total enrollment, percent of students qualifying for free or reduced price lunch, and percent of population in poverty
+
+
+2. For the counties with the top 5 and bottom 5 poverty rate: percent of population in poverty, percent of students qualifying for free or reduced price lunch, mean reading score, and mean math score.
+
+
+
+1. The relationship between access to free/reduced price lunch and test performance, at the *school* level.
+2. Average test performance across *counties* with high, low, and medium poverty.
+
+
+
+
+
+
+
